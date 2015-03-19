@@ -2,6 +2,7 @@ package mq
 
 import (
 	"errors"
+	"github.com/dalent/mq"
 	"github.com/streadway/amqp"
 )
 
