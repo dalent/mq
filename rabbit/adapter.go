@@ -51,7 +51,9 @@ func (p *rabbitAdapter) SetUp(url, queue string) error {
 }
 
 func (p *rabbitAdapter) Close() {
-	p.conn.Close()
+	if p.conn {
+		p.conn.Close()
+	}
 	p.conn = nil
 	p.ch = nil
 	p.queue = nil
