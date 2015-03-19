@@ -3,7 +3,6 @@ package mq
 import (
 	"errors"
 	"github.com/streadway/amqp"
-	"koolew/mq"
 )
 
 //我暂时只想封装下rabbit的接口
