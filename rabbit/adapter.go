@@ -1,4 +1,4 @@
-package mq
+package rabbit
 
 import (
 	"errors"
@@ -16,10 +16,11 @@ type rabbitAdapter struct {
 var rabbit rabbitAdapter
 
 func init() {
-	mq.Register(mq.RABBIT, &rabbit)
+	mq.Register(mq.RABBIT, NewRabbitAdapter)
 }
-func (p *rabbitAdapter) NewRabbitAdapter() *rabbitAdapter {
-	return new(rabbitAdapter)
+
+func NewRabbitAdapter() mq.Provider {
+	return &rabbitAdapter{}
 }
 func (p *rabbitAdapter) SetUp(url, queue string) error {
 	conn, err := amqp.Dial(url)

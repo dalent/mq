@@ -21,16 +21,21 @@ const (
 	RABBIT = "rabbit"
 )
 
-//keep the provider and the interface
-var mq = make(map[string]Provider)
+type New func() Provider
 
-func Register(name string, provider Provider) {
-	mq[name] = provider
+//keep the provider and the interface
+var mq = make(map[string]New)
+
+func Register(name string, function New) {
+	if _, ok := mq[name]; ok {
+		panic("name already registered:" + name)
+	}
+	mq[name] = function
 }
 
-func NewProvider(name string) (provider Provider, e error) {
-	if provider, ok := mq[name]; ok {
-		return provider, nil
+func NewProvider(name string) (Provider, error) {
+	if v, ok := mq[name]; ok {
+		return v(), nil
 	}
 
 	return nil, errors.New("not support manager")
