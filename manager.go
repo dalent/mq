@@ -11,7 +11,7 @@ type Action interface {
 type Provider interface {
 	SetUp(url, queue string) error
 	Close()
-	Consume(act Action) error
+	Consume(act Action, ack bool) error
 	Publish(string, []byte) error
 	NewWork(string, []byte) error
 	Worker(int, Action) error

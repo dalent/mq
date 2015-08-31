@@ -2,6 +2,7 @@ package rabbit
 
 import (
 	"errors"
+	"fmt"
 	"github.com/dalent/mq"
 	"github.com/streadway/amqp"
 )
@@ -136,7 +137,7 @@ func (p *rabbitAdapter) Publish(exchange string, bytes []byte) error {
 			Body:        bytes,
 		})
 }
-func (p *rabbitAdapter) Consume(action mq.Action) error {
+func (p *rabbitAdapter) Consume(action mq.Action, ack bool /*if auto ack*/) error {
 	err := p.Check()
 	if err != nil {
 		return err
@@ -145,7 +146,7 @@ func (p *rabbitAdapter) Consume(action mq.Action) error {
 	msgs, err := p.ch.Consume(
 		p.queue.Name, //queue
 		"",           //consume
-		true,         //auto-ack
+		ack,          //auto-ack false
 		false,        //exclusive
 		false,        //no-local
 		false,        //no wait
@@ -157,6 +158,12 @@ func (p *rabbitAdapter) Consume(action mq.Action) error {
 
 	for msg := range msgs {
 		action.Do(msg.Body)
+		if ack {
+			err := msg.Ack(false)
+			if err != nil {
+				fmt.Println("mq: ack error:", err)
+			}
+		}
 	}
 
 	return nil
