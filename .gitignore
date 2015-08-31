@@ -1,0 +1,11 @@
+*.bak
+*.log
+*.swap
+*.swp
+*.swo
+koolew
+*.tmp
+logs
+*.txt
+*.conf
+app.conf
