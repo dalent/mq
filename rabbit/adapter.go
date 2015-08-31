@@ -158,7 +158,7 @@ func (p *rabbitAdapter) Consume(action mq.Action, ack bool /*if auto ack*/) erro
 
 	for msg := range msgs {
 		action.Do(msg.Body)
-		if ack {
+		if !ack {
 			err := msg.Ack(false)
 			if err != nil {
 				fmt.Println("mq: ack error:", err)
